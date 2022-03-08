@@ -110,6 +110,30 @@ services:
     networks:
       - elk
 
+  tweetapp:
+    container_name: tweetapp
+    build:
+      context: ../tweetapp
+      dockerfile: docker/Dockerfile
+    ports:
+      - 8080:8080
+    networks:
+      - elk
+
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ../tweetapp-frontend
+      dockerfile: Dockerfile
+    environment:
+      TWEETAPP_BACKEND_HOST: tweetapp
+    volumes:
+      - "../tweetapp-frontend:/app"
+      - "../tweetapp-frontend/app/node_modules"
+    ports:
+      - "4200:4200"
+
 networks:
   elk:
     driver: bridge
